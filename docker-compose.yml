@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  M-team-notifier:
+    image: yourusername/notifier:latest
+    environment:
+      API_URL: "https://test2.m-team.cc/api/torrent/search"
+      API_KEY: "Your_API_Key"
+      MODE: "adult" # You can change to other categories
+      PAGE_NUMBER: 1
+      PAGE_SIZE: 25
+      CHECK_INTERVAL: 3600 # update per hour
+      AUTH_USERNAME: "name@email.com" # ntfy.sh user
+      AUTH_PASSWORD: "password" # ntfy.sh password
+      NOTIFICATION_URL: "https://ntfy.sh/" 
+      NOTIFICATION_TOPIC: "my_topic" # ntfy.sh topic
+      NOTIFICATION_TITLE: "Name your title" # name your title
+      NOTIFICATION_PRIORITY: 3 # If you don't know how to modify it, please keep the 3
+      NOTIFICATION_ACTIONS: '[{"action": "view", "label": "点击查看", "url": "https://www.google.com"}]'
+    volumes:
+      - ./torrent_search.log:/app/torrent_search.log

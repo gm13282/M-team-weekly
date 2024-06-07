@@ -1,0 +1,7 @@
+.m-team
+config copy.json
+test.http
+test_notification.py
+config.json
+__pycache__
+torrent_search.log
