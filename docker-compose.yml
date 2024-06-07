@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   M-team-notifier:
-    image: yourusername/notifier:latest
+    image: ghcr.io/wabol/m-team:main
     environment:
-      API_URL: "https://test2.m-team.cc/api/torrent/search"
+      API_URL: "https://kp.m-team.cc/api/torrent/search"
       API_KEY: "Your_API_Key"
       MODE: "adult" # You can change to other categories
       PAGE_NUMBER: 1
