@@ -3,6 +3,7 @@ version: '3.8'
 services:
   M-team-notifier:
     image: ghcr.io/wabol/m-team:main
+    container_name: M-team-notifier
     environment:
       API_URL: "https://kp.m-team.cc/api/torrent/search"
       API_KEY: "Your_API_Key"

@@ -78,7 +78,7 @@ def check_and_notify(data):
             discount = promotion_rule.get("discount", "")
             end_time_str = promotion_rule.get("endTime", "")
             
-            if descr.startswith("活動置頂") and discount == "FREE":
+            if "活動置頂" in descr and discount == "FREE":
                 if not end_time_str:
                     logger.warning(f"End time is missing for item {item['id']}")
                     continue
@@ -87,7 +87,7 @@ def check_and_notify(data):
                 remaining_days = (end_time - now).days
                 item_id = item["id"]
 
-                if remaining_days >= 7:
+                if remaining_days >= 6:
                     if item_id not in notified_items:
                         message = f"Notify: {descr}, End Time: {end_time_str}, Remaining Days: {remaining_days}"
                         logger.info(message)
