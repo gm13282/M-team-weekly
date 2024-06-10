@@ -7,3 +7,4 @@ __pycache__
 torrent_search.log
 mock_data.py
 main_test.py
+app/__pycache__
