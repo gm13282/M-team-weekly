@@ -5,3 +5,5 @@ test_notification.py
 config.json
 __pycache__
 torrent_search.log
+mock_data.py
+main_test.py

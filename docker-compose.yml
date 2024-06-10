@@ -18,3 +18,4 @@ services:
       NOTIFICATION_TITLE: "Name your title" # name your title
       NOTIFICATION_PRIORITY: 3 # If you don't know how to modify it, please keep the 3
       NOTIFICATION_ACTIONS: '[{"action": "view", "label": "点击查看", "url": "https://www.google.com"}]'
+      MESSAGE_MODE: 0 # If 1 will message the topic's name, 0 just "活動置頂"

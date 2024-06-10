@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 import json
 import logging
@@ -32,8 +33,14 @@ config = {
     "notification_topic": os.getenv("NOTIFICATION_TOPIC"),
     "notification_title": os.getenv("NOTIFICATION_TITLE"),
     "notification_priority": int(os.getenv("NOTIFICATION_PRIORITY", 3)),
-    "notification_actions": json.loads(os.getenv("NOTIFICATION_ACTIONS", "[]"))
+    "notification_actions": json.loads(os.getenv("NOTIFICATION_ACTIONS", "[]")),
+    "message_mode": json.loads(os.getenv("MESSAGE_MODE", 0))
 }
+
+# import config.json to config
+# with open('config.json') as f:
+#     config = json.load(f)
+#     logger.info("Configuration loaded from config.json")
 
 # API request URL and headers
 url = config["api_url"]
@@ -65,6 +72,9 @@ def fetch_data():
     except requests.exceptions.RequestException as e:
         logger.error(f"Request failed: {e}")
         return None
+    
+def extract_activiti_top(descr):
+    return re.search(r'\*活動置頂\d+\*', descr).group(0) if re.search(r'\*活動置頂\d+\*', descr) else None
 
 def check_and_notify(data):
     now = datetime.now()
@@ -74,10 +84,12 @@ def check_and_notify(data):
             logger.info(f"Processing item: {item}")  # Log each item being processed
             descr = item.get("smallDescr", "")
             status = item.get("status", {})
-            promotion_rule = status.get("promotionRule", {})
-            discount = promotion_rule.get("discount", "")
-            end_time_str = promotion_rule.get("endTime", "")
+            discount = status.get("discount", "")
+            end_time_str = status.get("discountEndTime", "")
+
+            logger.debug(f"descr: {descr}, status: {status}, discount: {discount}, end_time_str: {end_time_str}")
             
+            match = extract_activiti_top(descr)
             if "活動置頂" in descr and discount == "FREE":
                 if not end_time_str:
                     logger.warning(f"End time is missing for item {item['id']}")
@@ -87,9 +99,10 @@ def check_and_notify(data):
                 remaining_days = (end_time - now).days
                 item_id = item["id"]
 
-                if remaining_days >= 6:
+                if remaining_days >= 3:
                     if item_id not in notified_items:
-                        message = f"Notify: {descr}, End Time: {end_time_str}, Remaining Days: {remaining_days}"
+                        message_content = match if config["message_mode"] == 0 else descr
+                        message = f"Notify: {message_content}, End Time: {end_time_str}, Remaining Days: {remaining_days}"
                         logger.info(message)
                         send_notification(
                             url=config["notification_url"],
@@ -113,12 +126,16 @@ def check_and_notify(data):
             logger.error(f"Unexpected error processing item {item}: {e}")
 
 # Scheduled task to run periodically
+
 def scheduled_task():
     while True:
         try:
             data = fetch_data()
+            logger.info(f"Fetched data: {data}")
             if data and data.get("message") == "SUCCESS":
                 check_and_notify(data)
+            else:
+                logger.warning(f"Failed to fetch data or is None")
         except Exception as e:
             logger.error(f"Error in scheduled task: {e}")
         time.sleep(config["check_interval"])
