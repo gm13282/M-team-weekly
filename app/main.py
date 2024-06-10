@@ -79,6 +79,12 @@ def extract_activiti_top(descr):
 def check_and_notify(data):
     now = datetime.now()
     items = data.get("data", {}).get("data", [])
+
+    # Remove expired items from notified_items
+    expired_items = [item_id for item_id, end_time_str in notified_items.items() if datetime.strptime(end_time_str, "%Y-%m-%d %H:%M:%S") < now]
+    for item_id in expired_items:
+        notified_items.pop(item_id, None)
+
     for item in items:
         try:
             logger.info(f"Processing item: {item}")  # Log each item being processed
@@ -99,7 +105,7 @@ def check_and_notify(data):
                 remaining_days = (end_time - now).days
                 item_id = item["id"]
 
-                if remaining_days >= 7:
+                if remaining_days >= 6:
                     if item_id not in notified_items:
                         message_content = match if config["message_mode"] == 0 else descr
                         message = f"Notify: {message_content}, End Time: {end_time_str}, Remaining Days: {remaining_days}"
@@ -114,10 +120,9 @@ def check_and_notify(data):
                             priority=config["notification_priority"],
                             actions=config["notification_actions"]
                         )
-                        notified_items[item_id] = True
-                elif item_id in notified_items:
-                    logger.info(f"Cancel Notification: {descr}, End Time: {end_time_str}, Remaining Days: {remaining_days}")
-                    notified_items.pop(item_id, None)
+                        notified_items[item_id] = end_time_str
+                    else:
+                        logger.info(f"Item {item_id} already notified, skipping.")
         except KeyError as e:
             logger.error(f"KeyError processing item {item}: Missing key {e}")
         except ValueError as e:
