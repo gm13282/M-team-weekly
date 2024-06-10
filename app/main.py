@@ -5,7 +5,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 import time
-from app.notification import send_notification
+from notification import send_notification
 
 # Configure logging
 logging.basicConfig(
