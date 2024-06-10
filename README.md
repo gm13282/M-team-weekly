@@ -5,7 +5,8 @@
 一个安装有docker且可上网的机器即可。如果需要安装docker请访问这里 https://docs.docker.com/engine/install/
 ### 3. 下载docker-compose.yml文件
 下载docker-compose.yml文件到服务器，以Ubuntu为例，比如/home/M-team目录，或者粘贴下面命令完成。
-**注意** 请务必修改里面compose文件里面的内容
+**注意** 请务必修改里面compose文件里面的内容。
+
 必须要修改的内容如下：
 - API_KEY，登录你的账号-控制台-实验室-存取令牌生成
 - AUTH_USERNAME，你的ntfy账号
