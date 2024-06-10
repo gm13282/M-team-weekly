@@ -13,7 +13,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        TimedRotatingFileHandler("torrent_search.log", when="midnight", interval=1, backupCount=7),
+        TimedRotatingFileHandler("logs/torrent_search.log", when="midnight", interval=1, backupCount=7),
         logging.StreamHandler()
     ]
 )
