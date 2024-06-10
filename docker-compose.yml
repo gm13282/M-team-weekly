@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   M-team-notifier:
     image: ghcr.io/wabol/m-team:main
