@@ -19,7 +19,7 @@ sudo mkdir -p /home/M-team
 cat <<EOF > /home/M-team/docker-compose.yml
 services:
   M-team-notifier:
-    image: ghcr.io/wabol/m-team:main
+    image: ghcr.io/gm13282/m-team-weekly:main
     container_name: M-team-notifier
     environment:
       API_URL: "https://kp.m-team.cc/api/torrent/search"
