@@ -3,6 +3,7 @@ import re
 import requests
 import json
 import logging
+from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime, timedelta
 import time
 from notification import send_notification
@@ -12,7 +13,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("torrent_search.log"),
+        TimedRotatingFileHandler("torrent_search.log", when="midnight", interval=1, backupCount=7),
         logging.StreamHandler()
     ]
 )
