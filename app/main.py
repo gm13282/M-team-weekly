@@ -64,6 +64,7 @@ auth = requests.auth.HTTPBasicAuth(config["auth_username"], config["auth_passwor
 # Store notified items status
 notified_items = {}
 
+
 def fetch_data():
     try:
         response = requests.post(url, headers=headers, json=payload)
@@ -74,8 +75,10 @@ def fetch_data():
         logger.error(f"Request failed: {e}")
         return None
     
+
 def extract_activiti_top(descr):
     return re.search(r'\*活動置頂\d+\*', descr).group(0) if re.search(r'\*活動置頂\d+\*', descr) else None
+
 
 def check_and_notify(data):
     now = datetime.now()
@@ -132,6 +135,7 @@ def check_and_notify(data):
             logger.error(f"Unexpected error processing item {item}: {e}")
 
 # Scheduled task to run periodically
+
 
 def scheduled_task():
     while True:
