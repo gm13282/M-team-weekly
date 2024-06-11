@@ -12,8 +12,10 @@
 - AUTH_USERNAME，你的ntfy账号
 - AUTH_PASSWORD，你的ntfy密码
 - NOTIFICATION_TOPIC，你的ntfy设置的频道
-- MESSAGE_MODE，0为通知里面不包含标题，1为通知里面包含标题
-**注意** 其他内容默认也可以使用
+- MESSAGE_MODE，0为通知里面不包含标题，1为通知里面包含标题，默认为1
+
+>**注意** 请务必修改docker-compose文件里面的内容。除去以上部分，其他可以保持默认。
+
 ```shell
 sudo mkdir -p /home/M-team
 ```
