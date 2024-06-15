@@ -89,6 +89,9 @@ def check_and_notify(data):
     for item_id in expired_items:
         notified_items.pop(item_id, None)
 
+    # Collect all message_content
+    messages = []
+
     for item in items:
         try:
             logger.info(f"Processing item: {item}")  # Log each item being processed
@@ -112,18 +115,7 @@ def check_and_notify(data):
                 if remaining_days >= 6:
                     if item_id not in notified_items:
                         message_content = match if config["message_mode"] == 0 else descr
-                        message = f"Notify: {message_content}, End Time: {end_time_str}, Remaining Days: {remaining_days}"
-                        logger.info(message)
-                        send_notification(
-                            url=config["notification_url"],
-                            auth=auth,
-                            topic=config["notification_topic"],
-                            message=message,
-                            title=config["notification_title"],
-                            tags=["green_circle", "bust_in_silhouette"],
-                            priority=config["notification_priority"],
-                            actions=config["notification_actions"]
-                        )
+                        messages.append(f"{message_content}, End Time: {end_time_str}, Remaining Days: {remaining_days}")
                         notified_items[item_id] = end_time_str
                     else:
                         logger.info(f"Item {item_id} already notified, skipping.")
@@ -133,6 +125,21 @@ def check_and_notify(data):
             logger.error(f"ValueError processing item {item}: {e}")
         except Exception as e:
             logger.error(f"Unexpected error processing item {item}: {e}")
+
+    if messages:
+        unique_messages = list(set(messages))
+        combined_message = "\n".join(unique_messages)
+        logger.info(f"Combined message: {combined_message}")
+        send_notification(
+            url=config["notification_url"],
+            auth=auth,
+            topic=config["notification_topic"],
+            message=combined_message,
+            title=config["notification_title"],
+            tags=["green_circle", "bust_in_silhouette"],
+            priority=config["notification_priority"],
+            actions=config["notification_actions"]
+        )
 
 # Scheduled task to run periodically
 
