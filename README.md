@@ -26,7 +26,7 @@ services:
     image: ghcr.io/gm13282/m-team-weekly:latest
     container_name: M-team-notifier
     environment:
-      API_URL: "https://kp.m-team.cc/api/torrent/search"
+      API_URL: "https://api.m-team.cc/api/torrent/search"
       API_KEY: "Your_API_Key"
       MODE: "adult" 
       PAGE_NUMBER: 1
