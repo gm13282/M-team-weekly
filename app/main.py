@@ -112,7 +112,7 @@ def check_and_notify(data):
                 remaining_days = (end_time - now).days
                 item_id = item["id"]
 
-                if remaining_days >= 6:
+                if remaining_days >= 2:
                     if item_id not in notified_items:
                         message_content = match if config["message_mode"] == 0 else descr
                         messages.append(f"{message_content}, End Time: {end_time_str}, Remaining Days: {remaining_days}")
